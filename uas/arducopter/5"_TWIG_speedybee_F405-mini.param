@@ -1,0 +1,125 @@
+# 20251015_SB_F405_Mini_V_FS_v4
+# ===================================================================
+# PARAMETER FILE: SpeedyBee F405 Mini – Voltage-Only Autonomous Setup
+# Board: SpeedyBee F405 Mini
+# Version: v4 (2025-10-15)
+# Firmware: ArduPilot Copter (latest)
+# Battery: 4 S LiHV (Voltage-Only sensing)
+# Companion: RPi Zero 2 W @ 57600 baud (Mavlink-Anywhere / Netbird VPN)
+# ===================================================================
+
+
+
+# --- ORIENTATION REFERENCE ---
+# AHRS_ORIENTATION     → Flight Controller orientation relative to frame
+# COMPASS_ORIENT       → External compass (GPS module) orientation relative to FC
+# COMPASS_ORIENTATION  → Internal FC compass orientation (disabled)
+# ------------------------------
+# --- 1. FRAME & ORIENTATION ---
+# - Motors are wired exactly as in Betaflight (standard Quad X):
+#		Front ↑
+#		  4 2
+#		   X
+#		  3 1
+#-------------------------------
+AHRS_ORIENTATION,0           # FC arrow forward (default)
+FRAME_CLASS,1                # Quad (X) frame class
+FRAME_TYPE,12                # BetaFlightX motor layout (matches BF M1–M4 order)
+
+# --- 2. COMPASS ---
+COMPASS_USE,1                # Enable compass use
+COMPASS_EXTERNAL,1           # Use external compass (TBS M10Q)
+COMPASS_ORIENT,4             # Yaw 180 ° (GPS faces backwards) *********
+COMPASS_ORIENTATION,0        # Internal compass default (ignored)
+COMPASS_USE2,0               # Disable 2nd compass
+COMPASS_USE3,0               # Disable 3rd compass
+
+# --- 3. GPS ---
+GPS_AUTO_SWITCH,1            # Auto-switch between GPS modules if present
+GPS_GNSS_MODE,65             # GPS + GLONASS (robust lock)
+GPS1_GNSS_MODE,65            # Same for primary GPS
+
+# --- 4. SERIAL PORTS ---
+SERIAL1_PROTOCOL,2           # MAVLink 2 for RPi Zero 2 WH
+SERIAL1_BAUD,57              # 57600 baud to match RPi
+SERIAL2_PROTOCOL,23          # CRSF / ELRS future receiver port
+SERIAL2_BAUD,115             # 115200 baud for RC
+SERIAL5_PROTOCOL,16          # ESC telemetry protocol
+SERIAL5_BAUD,115             # 115200 baud for ESC telemetry
+SERIAL6_PROTOCOL,5           # GPS protocol (UBlox)
+SERIAL6_BAUD,115             # 115200 baud for GPS
+
+# --- 5. MOTORS / DSHOT / BLHeli / Bluejay ---
+MOT_PWM_TYPE,5               # DShot300 digital signal
+MOT_PWM_MIN,1000             # Minimum output µs equivalent
+MOT_PWM_MAX,2000             # Maximum output µs equivalent
+MOT_SPIN_ARM,0.10            # Motor idle when armed (10 %)
+MOT_SPIN_MIN,0.13            # Motor minimum spin (13 %)
+SERVO_BLH_AUTO,1             # Enable BLHeli/BlueJay passthrough
+SERVO_BLH_BDMASK,15          # Enable on motors 1-4 (mask 0b1111)
+SERVO_DSHOT_ESC,2            # Enable ESC telemetry on SERIAL5
+
+# --- 6. BATTERY MONITORING & FAILSAFES (VOLTAGE-ONLY) ---
+
+BATT_CAPACITY,0              # No capacity tracking
+BATT_CURR_PIN,-1             # Disable current sense pin
+BATT_CRT_MAH,0               # No critical mAh failsafe
+BATT_CRT_VOLT,14.0           # Land below 14.0 V (~3.5 V/cell)
+BATT_FS_CRT_ACT,1            # 1 = LAND on critical voltage
+BATT_FS_LOW_ACT,2            # 2 = RTL on low voltage
+BATT_LOW_MAH,0               # Disable mAh low trigger
+BATT_LOW_TIMER,15            # Stay below threshold for 15 s to trigger
+BATT_LOW_VOLT,14.4           # RTL below 14.4 V (~3.6 V/cell)
+BATT_MONITOR,3               # Voltage-only monitor
+BATT_VOLT_PIN,10             # Analog pin for voltage input
+
+# --- 7. FAILSAFES ---
+FS_EKF_ACTION,1              # Land if EKF fails
+FS_GCS_ENABLE,3              # Always monitor GCS link
+FS_GCS_TIMEOUT,30            # RTL after 30 s GCS loss
+FS_THR_ENABLE,0              # Disable RC throttle failsafe (GCS-only)
+
+# --- 8. RC OPTIONS ---
+RC_OPTIONS,769               # Ignore RC failsafe + enable CRSF telemetry
+
+# --- 9. ARMING & LOGGING ---
+ARMING_REQUIRE,1             # Require arming process (valid safety check)
+ARMING_CHECK,1047998         # All checks ON except RC channels
+LOG_BACKEND_TYPE,1           # Log to SD card
+LOG_BITMASK,176126           # Record most flight data
+LOG_DISARMED,1               # Log even when disarmed
+LOG_REPLAY,0                 # Disable replay buffer
+
+# --- 10. FLIGHT MODES ---
+FLTMODE1,4                   # GUIDED (autonomous via GCS)
+FLTMODE2,5                   # LOITER (GPS hold)
+FLTMODE3,3                   # AUTO (Mission mode)
+FLTMODE4,17                  # BRAKE (emergency stop)
+FLTMODE5,6                   # RTL (Return to Launch)
+FLTMODE6,9                   # LAND (auto land)
+
+# --- 11. GEOFENCE ---
+FENCE_ENABLE,1               # Enable geofence
+FENCE_TYPE,3                 # Circle + altitude limit
+FENCE_ALT_MAX,100            # Max 100 m altitude
+FENCE_RADIUS,300             # 300 m radius limit
+FENCE_ACTION,1               # RTL on breach
+
+# --- 12. FILTERING – RPM NOTCH FILTER ---
+INS_HNTCH_ENABLE,1           # Enable harmonic notch filter
+INS_HNTCH_MODE,3             # Dynamic frequency tracking
+INS_HNTCH_REF,1              # Reference on motor RPM
+INS_HNTCH_HMNCS,3            # Include 3 harmonics
+
+# --- 13. FLIGHT BEHAVIOUR / SPEEDS ---
+WPNAV_SPEED,500              # 5 m/s cruise speed
+WPNAV_SPEED_UP,200           # 2 m/s climb
+WPNAV_SPEED_DN,150           # 1.5 m/s descent
+WPNAV_ACCEL,250              # Acceleration limit (cm/s²)
+RTL_ALT,3000                 # 30 m return altitude
+RTL_CONE_SLOPE,3             # Cone approach for RTL
+
+# END
+
+
+
