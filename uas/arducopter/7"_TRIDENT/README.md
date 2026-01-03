@@ -29,10 +29,6 @@
   - Firmware build used at time of configuration  
   - https://firmware.ardupilot.org/Copter/stable-4.6.3/speedybeef4v4/
 
-- **Raspberry Pi OS:**  
-  `raspios_arm64_debian12_bookworm`  
-  - https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2023-12-06/2023-12-05-raspios-bookworm-arm64.img.xz
-
 - **ESC Firmware:**  
   - BlueJay (J-H-40)  
   - Version 0.21.0  
