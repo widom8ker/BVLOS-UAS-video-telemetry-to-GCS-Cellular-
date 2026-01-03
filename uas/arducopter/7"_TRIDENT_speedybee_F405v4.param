@@ -1,0 +1,251 @@
+# SpeedyBee F405_v4 7" Arducopter parameter file
+# ===================================================================
+# 		DOCUMENT INFORMATION
+# ===================================================================
+# Date: 31/12/25
+# Title: SB_F405v4
+# Doc Version: V3
+# ===================================================================
+# 		HARDWARE 
+# ===================================================================
+# Flight Controller: SpeedyBee F405v4
+# ESC's: SpeedyBee 55A AIO
+# Frame: 7"
+# Motors: NoName 2812 900kv
+# GPS: TBS M10Q
+# Reciever: ELRS RP2 2.4G
+# Transmitter: RadioMaster GX12 
+# Battery: 6S LiPo 1300mah
+# Props: Tarot 7" 7035 Tri-Blade (grey)
+# Compute: RaspberryPi Zero 2W (MavLink over 4G)
+# Bearer: 4G Sim card Dongle
+# ===================================================================
+# 		SOFTWARE
+# ===================================================================
+# Firmware: ArduPilot Copter (4.6.3) latest at the time
+# Link: https://firmware.ardupilot.org/Copter/stable-4.6.3/speedybeef4v4/
+# RaspberryPi: raspios_arm64_debian12_bookworm
+# Link: https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2023-12-06/2023-12-05-raspios-bookworm-arm64.img.xz
+# ESC Configurator: J-H-40, BlueJay, 0.21.0, 48khz
+# ===================================================================
+
+
+
+# ===================================================================
+# 		INSTRUCTIONS 
+# ===================================================================
+# This build focuses on a 7" UAS flying BVLOS over a 4G bearer back to a GCS.
+# The failsafes and core principles reflect that in the .param file
+# So unless thats also your aim, be careful using these param on your build
+# ===================================================================
+# 1. Load then write this .param file through MissionPlanner to your drone first
+# ===================================================================
+# 2. Then Run the Mission Planner setup
+# ===================================================================
+# 	Mandatory Hardware'
+#|		a. Accell Calibration
+# 		b. Copmass / Calibration
+# 		c. Radio / Calibration
+# 		d. Initial Tune Parameters (Add suggested settings for 4.0 and higher)
+#	Optional Hardware
+#		e. Joystck
+#		f. Motor test
+# ===================================================================
+# 3. Then load these params again
+# ===================================================================
+
+
+
+# ===================================================================
+# 		PARAMETERS
+# ===================================================================
+
+
+# ===================================================================
+# 	--- 1. FRAME ---
+# ===================================================================
+# - Motors are wired exactly as in Betaflight (standard Quad X):
+#		Front ↑
+#                cw (4)   (2) ccw
+#                     \   / 
+#                      \ /
+#		        X
+#                      / \
+#                     /   \
+#		ccw (3)   (1) cw
+# ===================================================================
+
+FRAME_CLASS,1 		# Quad (X) frame class
+FRAME_TYPE,12 		# BetaFlightX motor layout (matches BF M1–M4 order)
+
+# -------------------------------------------------------------------
+
+# ===================================================================
+# 	--- 2. ORIENTATION & COMPASS ---
+# ===================================================================
+# AHRS_ORIENTATION 	→ Flight Controller orientation relative to frame
+# COMPASS_ORIENT	→ External compass (GPS module) orientation relative to FC
+# ==================================================================
+
+AHRS_ORIENTATION,0 	# FC arrow forward (default, matches your build)
+COMPASS_USE,1 		# Enable compass use
+COMPASS_EXTERNAL,1	# Use external compass (TBS M10Q)
+COMPASS_ORIENT,4 	# 180 ° (GPS is facing backwards)			*********** CHECK on each drone
+COMPASS_USE2,0 		# Disable 2nd compass
+COMPASS_USE3,0 		# Disable 3rd compass
+
+# ------------------------------------------------------------------
+
+# ==================================================================
+# 	--- 3. GPS ---
+# ==================================================================
+
+GPS_AUTO_SWITCH,1 	# (Default) Auto-switch between GPS modules if present
+GPS1_GNSS_MODE,0 	# (Default) best
+
+# ------------------------------------------------------------------
+
+# ==================================================================
+# 	--- 4. SERIAL PORTS / UART MAPPING ---
+# ==================================================================
+# SERIAL1 -> UART1 (VTX)
+# SERIAL2 -> UART2 (RCIN)
+# SERIAL3 -> UART3 (MAVLINK RPi)
+# SERIAL4 -> UART4 (BLUETOOTH)
+# SERIAL5 -> UART5 (ESC Telemetry)
+# SERIAL6 -> UART6 (GPS)
+# =================================================================
+
+SERIAL1_PROTOCOL,-1 	# Disabled – no VTX / MSP needed			*********** ONLY relevant to SpeedyBee F405v4 FC
+SERIAL1_BAUD,115 	# Default baud (unused)
+SERIAL2_PROTOCOL,23 	# CRSF / ELRS RC input					*********** ONLY relevant to SpeedyBee F405v4 FC
+SERIAL2_BAUD,115 	# 115200 baud for RC link
+SERIAL3_PROTOCOL,2 	# MAVLink 2 for RPi Zero 2 WH				*********** ONLY relevant to SpeedyBee F405v4 FC
+SERIAL3_BAUD,57 	# 57600 baud to match RPi
+SERIAL4_PROTOCOL,-1 	# Disabled (internal BT not supported)			*********** ONLY relevant to SpeedyBee F405v4 FC
+SERIAL4_BAUD,115 	# Default baud (unused)
+SERIAL5_PROTOCOL,-1 	# Disabled no ESC telemetry				*********** ONLY relevant to SpeedyBee F405v4 FC
+SERIAL5_BAUD,115 	# 115200 baud for ESC telemetry
+SERIAL6_PROTOCOL,5 	# GPS protocol (UBlox)					*********** ONLY relevant to SpeedyBee F405v4 FC
+SERIAL6_BAUD,115 	# 115200 baud for GPS
+
+# -----------------------------------------------------------------
+
+# =================================================================
+# 	--- 5. MOTORS / DSHOT / BLHeli-S ---
+# =================================================================
+MOT_PWM_TYPE,5 		# 4=DShot150 5=DShot300 digital signal
+MOT_PWM_MIN,1000 	# Minimum output µs equivalent
+MOT_PWM_MAX,2000 	# Maximum output µs equivalent
+MOT_SPIN_ARM,0.10	# Motor idle when armed (10 %)
+MOT_SPIN_MIN,0.13 	# Motor minimum spin (13 %)
+MOT_SPIN_MAX,1		# Digital ESC's just put 1
+SERVO_BLH_AUTO,1 	# Enable BLHeli passthrough
+
+# -----------------------------------------------------------------
+
+# =================================================================
+# 	--- 6. BATTERY MONITORING & FAILSAFES (VOLTAGE-ONLY) ---
+# =================================================================
+# LiPo Batt Voltages (Full=4.2v/cell / Low=3.6v/cell / discharged/critical=3.3v/cell
+# Low is between 10-15% which work well with FS_LOW = RTL
+#
+# Board default analog pins for F405v4:
+# BATT_VOLT_PIN = 10
+# BATT_CURR_PIN = 11
+# =================================================================
+
+BATT_MONITOR,3 		# Voltage-only monitor (no current)
+BATT_ARM_VOLT,0		# Keep zero to ARM with any cell count battery
+BATT_CAPACITY,0 	# No capacity tracking
+
+BATT_CURR_PIN,-1 	# Disable current sense pin avialible
+BATT_VOLT_PIN,10 	# (Default=10) Use internal voltage sense pin 10
+
+BATT_LOW_VOLT,21.6 	# RTL  4S=14.4v / 6S=21.6v (LiPo/LiHV= 3.6v/cell)	*********** CHANGES WITH BATTERY
+BATT_CRT_VOLT,19.8 	# Land 4S=13.2v / 6S=19.8v (LiPo/LiHV= 3.3v/cell)	*********** CHANGES WITH BATTERY
+BATT_FS_LOW_ACT,2 	# 2 = RTL on low voltage				
+BATT_FS_CRT_ACT,1 	# 1 = LAND on critical voltage				
+
+# -----------------------------------------------------------------
+
+# =================================================================
+# 	--- 7. FAILSAFES ---
+# =================================================================
+
+FS_EKF_ACTION,1 	# Land if EKF fails
+FS_GCS_ENABLE,3 	# Always monitor GCS link
+FS_GCS_TIMEOUT,3 	# RTL after 3s GCS loss (Default=5)
+FS_THR_ENABLE,0 	# Disable RC throttle failsafe (GCS-only; RC optional)
+RC_FS_TIMEOUT,1		# Irrelevant since FS_THR_ENABLE= disabled
+
+# -----------------------------------------------------------------
+
+# =================================================================
+# 	--- 8. RC OPTIONS ---
+# =================================================================
+
+RCMAP_YAW,1		# Yaw							*********** CHANGE IF YOU DON'T FLY MODE 4
+RCMAP_PITCH,2		# Pitch							*********** CHANGE IF YOU DON'T FLY MODE 4
+RCMAP_THROTTLE,3	# Throttle						*********** CHANGE IF YOU DON'T FLY MODE 4
+RCMAP_ROLL,4		# Roll							*********** CHANGE IF YOU DON'T FLY MODE 4
+
+RC5_OPTION,153		# Arm/Disarm						*********** CHANGE CH5 FOR YOUR SETUP 
+FLTMODE_CH,6		# Select Flight Mode 1-6 on CH6				*********** CHANGE CH5 FOR YOUR SETUP
+
+RC_OPTIONS,32 		# (Default=32) Arming check throttle for 0 input
+RSSI_TYPE,3		# RSSI via CRSF / ELRS monitoring
+
+# =================================================================
+# 	--- 9. ARMING & LOGGING ---
+# =================================================================
+
+ARMING_CHECK,1046974 	# All checks ON except "RC_CH" & "LOG_AVAILIBLE"
+LOG_BACKEND_TYPE,1 	# 0=disabled / 1=file(sdcard) / 2=mavlink (streaming) / 3=block(onboard flash)
+LOG_BITMASK,145358	# Record most flight data 
+LOG_DISARMED,2 		# Disabled on USB connection
+LOG_REPLAY,0 		# Disable replay buffer
+
+# -----------------------------------------------------------------
+
+# =================================================================
+# 	--- 10. FLIGHT MODES ---
+# =================================================================
+
+FLTMODE1,0 		# STABILISE (control)
+FLTMODE2,5 		# LOITER (GPS hold)
+FLTMODE3,4 		# GUIDED (autonomous control via GCS)
+FLTMODE4,3 		# AUTO (autonomous flight plan via GCS) 
+FLTMODE5,9 		# LAND (auto land)
+FLTMODE6,6 		# RTL (Return to Launch) 
+
+# -----------------------------------------------------------------
+
+# =================================================================
+# 	--- 11. GEOFENCE ---
+# =================================================================
+
+FENCE_ENABLE,1 		# Enable geofence
+FENCE_TYPE,3 		# Max altitude + Circle centred on home
+FENCE_ALT_MAX,10 	# Max altitude limit in (m)	(Default=100)		*********** CHANGE AFTER FIRST TEST FLIGHT
+FENCE_RADIUS,10 	# Max radius limit in (m)	(Default=300)		*********** CHANGE AFTER FIRST TEST FLIGHT
+FENCE_ACTION,2 		# Always LAND						*********** CHANGE AFTER FIRST TEST FLIGHT
+
+# -----------------------------------------------------------------
+
+# =================================================================
+# --- 13. FLIGHT BEHAVIOUR / SPEEDS ---
+# =================================================================
+
+WPNAV_SPEED,500 	# 500 cm/s = 5 m/s cruise speed	(Default=1000)
+WPNAV_SPEED_UP,200 	# 200 cm/s = 2 m/s climb	(Default=250)
+WPNAV_SPEED_DN,150 	# 150 cm/s = 1.5 m/s descent	(Default=150)
+WPNAV_ACCEL,250 	# Acceleration limit (cm/s²)	(Default=250)
+RTL_ALT,3000 		# 3000cm = 30 m return altitude	(Default=1500)
+
+
+# -----------------------------------------------------------------
+
+# =================================================================
+# END
+# =================================================================
