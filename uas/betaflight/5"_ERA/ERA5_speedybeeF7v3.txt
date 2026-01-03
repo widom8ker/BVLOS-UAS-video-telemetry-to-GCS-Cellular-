@@ -1,0 +1,118 @@
+defaults nosave
+
+
+# version
+# Betaflight / STM32F7X2 (S7X2) 4.5.2 Mar 20 2025 / 04:03:37 (024f8e13d) MSP API: 1.46
+# config rev: 0f78778
+
+# start the command batch
+batch start
+
+# reset configuration to default settings
+defaults nosave
+
+board_name SPEEDYBEEF7V3
+manufacturer_id SPBE
+mcu_id 003800313233511639373734
+signature 
+
+# name: ERA 5
+
+# feature
+feature INFLIGHT_ACC_CAL
+feature SOFTSERIAL
+feature GPS
+feature TELEMETRY
+feature LED_STRIP
+feature OSD
+
+# serial
+serial 0 131073 115200 57600 0 115200
+serial 1 64 115200 57600 0 115200
+serial 5 2 115200 57600 0 115200
+
+# beacon
+beacon RX_LOST
+beacon RX_SET
+
+# map
+map RETA1234
+
+# aux
+aux 0 0 0 1800 2100 1 0
+aux 1 1 2 1900 2100 0 0
+aux 2 2 2 1350 1700 0 0
+aux 3 27 5 1800 2100 1 0
+aux 4 27 0 900 900 1 1
+aux 5 46 7 1800 2100 0 0
+aux 6 13 1 1300 2100 0 0
+aux 7 35 1 1800 2100 0 0
+aux 8 36 3 1800 2100 0 0
+aux 9 39 6 1800 2100 1 0
+aux 10 39 4 1800 2100 1 0
+
+# master
+set dyn_notch_count = 1
+set dyn_notch_q = 500
+set acc_calibration = -20,16,6,1
+set dshot_bidir = ON
+set motor_pwm_protocol = DSHOT300
+set motor_output_reordering = 3,2,1,0,4,5,6,7
+set failsafe_procedure = GPS-RESCUE
+set align_board_yaw = 180
+set bat_capacity = 1400
+set vbat_warning_cell_voltage = 360
+set ibata_scale = 770
+set yaw_motors_reversed = ON
+set small_angle = 180
+set gps_sbas_mode = AUTO
+set gps_ublox_use_galileo = ON
+set gps_rescue_throttle_hover = 1350
+set osd_link_quality_alarm = 81
+set osd_cap_alarm = 1200
+set osd_vbat_pos = 15375
+set osd_rssi_pos = 14368
+set osd_link_quality_pos = 14336
+set osd_tim_2_pos = 15503
+set osd_throttle_pos = 15650
+set osd_ah_sbar_pos = 14650
+set osd_ah_pos = 14522
+set osd_mah_drawn_pos = 15440
+set osd_craft_name_pos = 14360
+set osd_gps_speed_pos = 15696
+set osd_gps_lon_pos = 31328
+set osd_gps_lat_pos = 31296
+set osd_gps_sats_pos = 14432
+set osd_home_dir_pos = 14394
+set osd_home_dist_pos = 15664
+set osd_altitude_pos = 14624
+set osd_warnings_pos = 14965
+set osd_avg_cell_voltage_pos = 15407
+set osd_battery_usage_pos = 49653
+set osd_disarmed_pos = 14935
+set craft_name = ERA 5
+set pilot_name = TheWizard
+
+profile 0
+
+profile 1
+
+profile 2
+
+profile 3
+
+# restore original profile selection
+profile 0
+
+rateprofile 0
+
+rateprofile 1
+
+rateprofile 2
+
+rateprofile 3
+
+# restore original rateprofile selection
+rateprofile 0
+
+# save configuration
