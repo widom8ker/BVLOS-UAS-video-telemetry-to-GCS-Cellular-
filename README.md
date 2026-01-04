@@ -35,14 +35,14 @@ Practical guide and reference material for delivering live video and MAVLink tel
 - Raspberry Pi Zero 2 WH
 
 ---
-## Linux Operating System for Raspberry Pi
+## Linux Operating System: Raspberry Pi OS
 
 - **Distributor:** Debian  
 - **Description:** Debian GNU/Linux 12 (bookworm)  
 - **Release:** 12  
 - **Codename:** bookworm
 
-**Raspberry Pi iOS Image:**  
+**Raspberry Pi OS Image:**  
 https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2023-12-06/2023-12-05-raspios-bookworm-arm64.img.xz
 
 ---
@@ -92,8 +92,8 @@ https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2023-12-06/
 
 
 
-# Step 1: Installing RaspiOS, Netbird, and Mavlink Anywhere
-## Initial Setup
+# Step 1: Installing Raspberry Pi OS 
+## Flash SD card
 1. Download Raspberry Pi iOS from the link above if using a Non RPi SBC arm64.
 2. For the RPi Zero 2 WH use **Raspberry Pi Imager** to write the OS to the SD card.
    - Choose RPi Zero 2 WH 
@@ -101,6 +101,8 @@ https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2023-12-06/
    - Choose Raspberry Pi OS (Legacy, 64-bit)
      - It should show "A port of Debian Bookworm with security updates and desktop inviroment" 
    - Proceed with the Customisation and writing of the OS
+  
+## Initial desktop Setup
 3. Insert the flashed SD card into the Raspberry Pi and boot normally with:
    - HDMI & display
    - Keyboard and mouse
@@ -125,11 +127,13 @@ https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2023-12-06/
 
 7. Reboot when prompted.
 
+## Remote access RPi (SSH)
+
 The system will now boot directly to the command line (no desktop). You can continue setup remotely using **MobaXterm** from another PC.
 
+---
 
-
-
+# Step 2: Installing Netbird & Mavlink-anywhere
 
 ---
 ## Disable Kernel & Bootloader Updates
@@ -158,7 +162,7 @@ sudo netbird up
 #### Netbird web-admin panel
 - Find the peer device you just autenticated
 - Disable Session Expiration
-- Do NOT Enable **SSH access** (Advanced option)
+- (Advanced option) Do NOT Enable **SSH access** 
 - Note your **Netbird IP address** (example: `100.127.213.206`)
 
 
@@ -172,7 +176,7 @@ sudo netbird up
 
 
 ---
-### Enable SSH on Netbird (Optional-Advanced) 
+### (Optional-Advanced) Enable SSH on Netbird  
  - SSH will be managed by Netbird and the native SSH server needs to be disabled for this to work
 ```bash
 sudo netbird down
@@ -217,17 +221,17 @@ sudo ./configure_mavlink_router.sh
 
 
 ---
-### Service Checks (Optional)
+### (Optional) Service Checks 
 ```bash
 sudo systemctl status mavlink-router
 ```
 
-### Live Logs (Optional)
+### (Optional) Live Logs 
 ```bash
 sudo journalctl -u mavlink-router -f
 ```
 
-### Configuration File Location (Optional)
+### (Optional) Configuration File Location 
 ```bash
 sudo nano /etc/mavlink-router/main.conf
 ```
@@ -245,7 +249,7 @@ cd ~
 ## Raspberry Pi MAVLink UART Wiring
 
 After installing and configuring MAVLink on the Raspberry Pi, connect the
-flight controller to the Raspberry Pi using the onboard UART.
+flight controller's UART pins to the Raspberry Pi GPIO pins.
 
 ![Raspberry Pi MAVLink UART GPIO pins](images/mavlink-rpi-gpio-pins.png)
 
@@ -263,9 +267,9 @@ flight controller and the companion computer.
 
 
 ---
-# Step 2: Video Streaming over Netbird to Mission Planner / QGroundControl
+# Step 3: Installing Gstreamer & configuring video stream to GCS
 ## Network Information (Examples)
-### Raspberry Pi Zero 2 WH
+### Raspberry Pi Zero 2 WH (onboard UAS)
 
 - Local IP: (Example`192.168.5.34`)  	
 - Netbird IP: (Example`100.127.55.72`)	
@@ -279,7 +283,7 @@ flight controller and the companion computer.
 
 
 ---
-# Method 1 (Preferred)
+# Method 1: (Preferred)
 #### RTSP streaming using GStreamer RTSP Server (Python)
 
 ## Install GStreamer & dependencies 
@@ -353,7 +357,7 @@ print(
 
 GLib.MainLoop().run()
 ```
-
+- (Optional) Replace `<Netbird-RPi-IP>` with your Netbird IP for the Rpi
 ---
 ## Make Script Executable & Run
 
@@ -376,6 +380,10 @@ rtsp://<Netbird-RPi-IP>:8554/stream
 ```
 
 - Replace `<Netbird-RPi-IP>` with your Netbird IP for the Rpi
+
+- GQC does not allow the camera to be flipped in software as it does on MissionPlanner
+
+
 #### Testbench performance on Rpi Zero 2WH `40% CPU , 0.19GB Ram , 2.5Mb/s Upload , 1.15s latency`
 
 
@@ -390,18 +398,12 @@ rtsp://<Netbird-RPi-IP>:8554/stream
 rtspsrc location=rtsp://<Netbird-RPi-IP>:8554/stream latency=0 ! rtph264depay ! avdec_h264 ! videoconvert ! video/x-raw,format=BGRA ! appsink name=outsink
 ```
 
-- Replace `<Netbird-RPi-IP>` with your Netbird IP for the Rpi
-
-
-
-
-
-
-
 #### To flip the camera 
 ```
 rtspsrc location=rtsp://<Netbird-RPi-IP>:8554/stream latency=0 ! rtph264depay ! avdec_h264 ! videoflip method=rotate-180 ! videoconvert ! video/x-raw,format=BGRA ! appsink name=outsink
 ```
+- Replace `<Netbird-RPi-IP>` with your Netbird IP for the Rpi
+
 #### Testbench performance on Rpi Zero 2WH `40% CPU , 0.19GB Ram , 2.5Mb/s Upload , 1.15s latency`
 
 ---
@@ -440,14 +442,14 @@ sudo systemctl daemon-reload
 sudo systemctl start gcsstream-rtsp
 sudo systemctl enable gcsstream-rtsp
 ```
-### Check service status (Optional)
+### (Optional) Check service status 
 
 ```bash
 sudo systemctl status gcsstream-rtsp
 ```
 
 
-### Stop & Disable (Optional)
+### (Optional) Stop & Disable 
 
 ```bash
 sudo systemctl stop gcsstream-rtsp
@@ -456,11 +458,11 @@ sudo systemctl disable gcsstream-rtsp
 
 ---
 
-# Method 2 (Fallback)
+# Method 2: (Fallback)
 
 **Push streaming to GCS using rpicam-vid OR Gstreamer**
 
-### Option 1 (rpicam-vid) - Mission Planner Only
+### Option 1: (rpicam-vid) - Mission Planner Only
 
 ```bash
 rpicam-vid -t 0 --nopreview --width 1280 --height 720 --framerate 20 \
@@ -476,7 +478,7 @@ udpsink host=<Netbird-GCS-IP> port=5600 sync=false
 
 ---
 
-### Option 2 (Gstreamer) - Mission Planner Only
+### Option 2: (Gstreamer) - Mission Planner Only
 
 ```bash
 gst-launch-1.0 -v libcamerasrc ! \
@@ -495,8 +497,12 @@ udpsink host=<Netbird-GCS-IP> port=5600
 
 ---
 
-# Method 3 (Last Resort)
-**TCP streaming using rpicam-vid (VLC only)**
+# Method 3: (Last Resort)
+
+**TCP streaming to GCS using rpicam-vid**
+
+### Option 1: (rpicam-vid) - VLC Only
+
 ```bash
 rpicam-vid \
   --width 1280 \
