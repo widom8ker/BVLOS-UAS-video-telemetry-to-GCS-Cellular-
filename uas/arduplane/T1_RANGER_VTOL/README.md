@@ -27,7 +27,7 @@
 
 ## Software Configuration
 
-- **Firmware:** ArduPlane V4.5.7  bdshot
+- **FC Firmware:** ArduPlane V4.5.7  bdshot
   - Firmware build used at time of configuration  
   - https://firmware.ardupilot.org/Plane/stable-4.5.7/MatekH743-bdshot/
 
@@ -75,7 +75,7 @@ Complete the following setup steps:
 - Initial tune parameters  
   - Apply suggested settings for ArduPilot 4.0 and higher  
 
-#### Optional
+#### Optional Hardware
 - Joystick configuration  
 - Motor test  
 
