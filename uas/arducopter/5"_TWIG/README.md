@@ -25,7 +25,7 @@
 
 ## Software Configuration
 
-- **Firmware:** ArduPilot Copter 4.6.3  
+- **FC Firmware:** ArduPilot Copter 4.6.3  
   - Firmware build used at time of configuration  
   - https://firmware.ardupilot.org/Copter/stable-4.6.3/SpeedyBeeF405Mini/
 
@@ -68,7 +68,7 @@ Complete the following setup steps:
 - Initial tune parameters  
   - Apply suggested settings for ArduPilot 4.0 and higher  
 
-#### Optional
+#### Optional Hardware
 - Joystick configuration  
 - Motor test  
 
