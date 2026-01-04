@@ -1,3 +1,25 @@
+> ⚠️ **Disclaimer**
+>  
+> This repository is provided for **reference and educational purposes only**.  
+> Configuration examples and parameter files are hardware- and use-case-specific.  
+> Use at your own risk.
+
+---
+
+## Dependencies and Attribution
+
+This guide relies on and builds upon the **MAVLink Anywhere** open-source project
+for MAVLink forwarding and networking functionality.
+
+- Project: https://github.com/mavlink-anywhere/mavlink-anywhere
+- All original code and concepts remain the property of their respective authors
+  and are used in accordance with the project’s licence.
+
+This repository focuses on **system integration, configuration, and validation**
+rather than original software development.
+
+---
+
 # BVLOS-UAS-video-telemetry-to-GCS-Cellular-(V3)
 Practical guide and reference material for delivering live video and MAVLink telemetry from a BVLOS UAS to a Ground Control Station (GCS) over a cellular data connection. Includes Single Board Computer (SBC) integration (Raspberry Pi Zero 2 W) and use of an overlay VPN (NetBird) for secure connectivity.
 
@@ -79,7 +101,7 @@ https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2023-12-06/
    - Choose Raspberry Pi OS (Legacy, 64-bit)
      - It should show "A port of Debian Bookworm with security updates and desktop inviroment" 
    - Proceed with the Customisation and writing of the OS
-3. Insert the SD card into the Raspberry Pi and boot normally with:
+3. Insert the flashed SD card into the Raspberry Pi and boot normally with:
    - HDMI & display
    - Keyboard and mouse
 4. During first boot:
