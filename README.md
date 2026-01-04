@@ -220,6 +220,21 @@ cd ~
 
 
 
+## Raspberry Pi MAVLink UART Wiring
+
+After installing and configuring MAVLink on the Raspberry Pi, connect the
+flight controller to the Raspberry Pi using the onboard UART.
+
+![Raspberry Pi MAVLink UART GPIO pins](images/mavlink-rpi-gpio-pins.png)
+
+**Wiring notes:**
+- Use a **5V-tolerant UART** on the flight controller
+- **TX ↔ RX must be crossed** (FC TX → RPi RX, FC RX → RPi TX)
+- **Ground must be common** between the flight controller and the Raspberry Pi
+- Power the Raspberry Pi only from a **regulated 5V source**
+
+This UART link is used solely for MAVLink communication between the
+flight controller and the companion computer.
 
 
 
