@@ -68,7 +68,7 @@ Complete the following setup steps:
 - Initial tune parameters  
   - Apply suggested settings for ArduPilot 4.0 and higher  
 
-#### Optional
+#### Optional Hardware
 - Joystick configuration  
 - Motor test  
 
