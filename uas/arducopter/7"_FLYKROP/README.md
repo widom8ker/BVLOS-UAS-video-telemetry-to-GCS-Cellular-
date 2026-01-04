@@ -25,7 +25,7 @@
 
 ## Software Configuration
 
-- **Firmware:** ArduPilot Copter 4.6.3  
+- **FC Firmware:** ArduPilot Copter 4.6.3  
   - Firmware build used at time of configuration  
   - https://firmware.ardupilot.org/Copter/stable-4.6.3/speedybeef4v4/
 
